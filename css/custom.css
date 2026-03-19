@@ -12,3 +12,12 @@
 #footer::before {
     background: transparent !important;
 }
+
+/* 让侧边栏卡片、文章卡片带一点玻璃拟态（模糊）效果 */
+#aside-content .card-widget, 
+.recent-post-item, 
+#content-inner #post {
+    background: rgba(255, 255, 255, 0.1) !important; 
+    backdrop-filter: blur(10px); /* 磨砂玻璃的核心：背景模糊 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容苹果浏览器 */
+}
