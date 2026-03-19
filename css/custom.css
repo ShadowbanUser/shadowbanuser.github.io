@@ -1,0 +1,14 @@
+/* 强制覆盖页脚的蓝色背景 */
+#footer {
+    background: #101010 !important; 
+}
+
+/* 确保页脚里面的文字（比如版权信息）变成浅灰色，防止黑底黑字看不清 */
+#footer * {
+    color: #a9a9b3 !important;
+}
+
+/* 覆盖页脚那个半透明的渐变遮罩（如果有的话） */
+#footer::before {
+    background: transparent !important;
+}
