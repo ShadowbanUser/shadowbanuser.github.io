@@ -21,3 +21,19 @@
     backdrop-filter: blur(10px); /* 磨砂玻璃的核心：背景模糊 */
     -webkit-backdrop-filter: blur(10px); /* 兼容苹果浏览器 */
 }
+
+/* 强杀标签页的随机背景色 */
+#page .tag-cloud-list a {
+    background: transparent !important; /* 强制透明背景 */
+    border: 1px solid #00d4ff !important; /* 统一改为科技蓝边框 */
+    color: #00d4ff !important; /* 文字颜色统一为科技蓝 */
+    box-shadow: 0 0 5px rgba(0, 212, 255, 0.2) !important; /* 加一点霓虹光晕 */
+    border-radius: 4px !important; /* 切掉过于圆润的边角，稍微硬朗一点 */
+}
+
+/* 鼠标悬停时的动态反转效果 */
+#page .tag-cloud-list a:hover {
+    background: #00d4ff !important; /* 悬停时背景填满 */
+    color: #000000 !important; /* 文字变黑 */
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6) !important; /* 增强发光 */
+}
