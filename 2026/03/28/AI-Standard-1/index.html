@@ -1,0 +1,740 @@
+<!DOCTYPE html><html lang="zh-CN/en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>转载&amp;存档丨AI 标准协议及调用（1） | 养精蓄锐</title><meta name="author" content="NecroSZN"><meta name="copyright" content="NecroSZN"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="AI 标准协议及调用前言AI近期来发展迅速，这段时间刷视频和朋友圈总是看到大家又在说什么前端已死、后端已死，还有什么你们搞大模型的都是码奸之类的话，这些也都是AI迅速发展的表现。在这种环境下，学习开发的人很难不焦虑，有些时候甚至会想还有必要学基础的编程吗，直接全部vibe coding不就好了吗，但其实不是这样的，编程能力从来不是跳跃式获得的，所有的学习都是一条平滑上升的曲线，要学好计算机，先从最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="转载&amp;存档丨AI 标准协议及调用（1）">
+<meta property="og:url" content="https://shadowbanuser.github.io/2026/03/28/AI-Standard-1/index.html">
+<meta property="og:site_name" content="养精蓄锐">
+<meta property="og:description" content="AI 标准协议及调用前言AI近期来发展迅速，这段时间刷视频和朋友圈总是看到大家又在说什么前端已死、后端已死，还有什么你们搞大模型的都是码奸之类的话，这些也都是AI迅速发展的表现。在这种环境下，学习开发的人很难不焦虑，有些时候甚至会想还有必要学基础的编程吗，直接全部vibe coding不就好了吗，但其实不是这样的，编程能力从来不是跳跃式获得的，所有的学习都是一条平滑上升的曲线，要学好计算机，先从最">
+<meta property="og:locale">
+<meta property="og:image" content="https://shadowbanuser.github.io/images/iroha.jpg">
+<meta property="article:published_time" content="2026-03-28T08:41:55.000Z">
+<meta property="article:modified_time" content="2026-04-14T12:25:08.738Z">
+<meta property="article:author" content="NecroSZN">
+<meta property="article:tag" content="llm调用">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shadowbanuser.github.io/images/iroha.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "转载&存档丨AI 标准协议及调用（1）",
+  "url": "https://shadowbanuser.github.io/2026/03/28/AI-Standard-1/",
+  "image": "https://shadowbanuser.github.io/images/iroha.jpg",
+  "datePublished": "2026-03-28T08:41:55.000Z",
+  "dateModified": "2026-04-14T12:25:08.738Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "NecroSZN",
+      "url": "https://shadowbanuser.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/iroha.jpg"><link rel="canonical" href="https://shadowbanuser.github.io/2026/03/28/AI-Standard-1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '转载&存档丨AI 标准协议及调用（1）',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/iroha.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/"><i class="fa-fw fas fa-video"></i><span> Bangumis</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/yukina.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">养精蓄锐</span></a><a class="nav-page-title" href="/"><span class="site-name">转载&amp;存档丨AI 标准协议及调用（1）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/bangumis/"><i class="fa-fw fas fa-video"></i><span> Bangumis</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">转载&amp;存档丨AI 标准协议及调用（1）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-03-28T08:41:55.000Z" title="Created 2026-03-28 16:41:55">2026-03-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-14T12:25:08.738Z" title="Updated 2026-04-14 20:25:08">2026-04-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">7.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>30mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="AI-标准协议及调用"><a href="#AI-标准协议及调用" class="headerlink" title="AI 标准协议及调用"></a>AI 标准协议及调用</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>AI近期来发展迅速，这段时间刷视频和朋友圈总是看到大家又在说什么前端已死、后端已死，还有什么你们搞大模型的都是码奸之类的话，这些也都是AI迅速发展的表现。在这种环境下，学习开发的人很难不焦虑，有些时候甚至会想还有必要学基础的编程吗，直接全部vibe coding不就好了吗，但其实不是这样的，编程能力从来不是跳跃式获得的，所有的学习都是一条平滑上升的曲线，要学好计算机，先从最基本的coding学起，学习前端、后端，再到全栈、agent,逐渐再转向研发大模型，这样才算是健全的学习道路，而非是从一开始就跑去学习大模型。本质上，AI 不是起点，而是建立在扎实工程能力之上的。接下来就会讲解在学习AI的过程中最基础的AI标准协议及调用。</p>
+<h2 id="现在的-API-协议已经相当标准化和通用化"><a href="#现在的-API-协议已经相当标准化和通用化" class="headerlink" title="现在的 API 协议已经相当标准化和通用化"></a>现在的 API 协议已经相当标准化和通用化</h2><h3 id="参考-HTTP-协议"><a href="#参考-HTTP-协议" class="headerlink" title="参考 HTTP 协议"></a>参考 HTTP 协议</h3><p>在讲 AI API 协议之前，我们先复习一下 HTTP 协议，这在之前也有讲过。HTTP（超文本传输协议）是互联网通信的基础，也是现在AI应用中最常用的传输层协议,它定义了客户端和服务器之间如何交换数据的规则：</p>
+<ul>
+<li><strong>统一的请求格式</strong>：包含 GET、POST、PUT、DELETE 等方法</li>
+<li><strong>标准化的状态码</strong>：200 成功、404 未找到(这个大家应该都见过)、500 服务器错误等</li>
+<li><strong>通用的头部字段</strong>：Content-Type、Authorization 等等，这些就不赘述了</li>
+</ul>
+<h3 id="AI-API-协议"><a href="#AI-API-协议" class="headerlink" title="AI API 协议"></a>AI API 协议</h3><p>同样的道理，AI 模型的调用也需要标准化的协议，：</p>
+<ol>
+<li><strong>统一接口</strong>：开发者可以用相似的方式调用不同的模型，只需要改变某些参数就可以，之后会接触到的mcp其实也是一种统一接口</li>
+<li><strong>降低学习成本</strong>：掌握一种协议后，可以快速迁移到其他兼容服务，多数协议其实差别不大，只需要改一些字段</li>
+<li><strong>生态系统建设</strong>：标准化促进了工具库、框架的发展，这对开发者来说十分友好</li>
+<li><strong>互操作性</strong>：应用可以轻松切换不同的 AI 服务提供商，包括国内的和国外的</li>
+</ol>
+<p>目前主流的 AI API 协议和工具主要有以下几种：</p>
+<h3 id="主流协议"><a href="#主流协议" class="headerlink" title="主流协议"></a>主流协议</h3><ul>
+<li><strong>OpenAI API 协议</strong>：由 OpenAI 制定，已成为事实上的行业标准，被广泛采用</li>
+<li><strong>Anthropic (Claude) API 协议</strong>：由 Anthropic 为 Claude 系列模型设计，强调安全性</li>
+</ul>
+<h3 id="其他协议和工具"><a href="#其他协议和工具" class="headerlink" title="其他协议和工具"></a>其他协议和工具</h3><ul>
+<li><strong>Google Gemini API</strong>：Google 的多模态 AI 协议，支持文本、图像、视频等多种输入</li>
+<li><strong>LiteLLM</strong>：统一的 API 接口，支持 100+ 种 LLM 模型，一套代码调用所有模型</li>
+<li><strong>OpenRouter</strong>：AI 模型聚合平台，提供统一的 OpenAI 兼容接口访问多家模型</li>
+<li><strong>Ollama</strong>：本地运行开源模型的工具，提供 OpenAI 兼容的 API 接口</li>
+</ul>
+<p>本文将详细讲解 <strong>OpenAI</strong> 和 <strong>Claude</strong> 两种主流协议，其他工具会简要介绍使用方法。</p>
+<h2 id="OpenAI-API-协议详解"><a href="#OpenAI-API-协议详解" class="headerlink" title="OpenAI API 协议详解"></a>OpenAI API 协议详解</h2><h3 id="协议概述"><a href="#协议概述" class="headerlink" title="协议概述"></a>协议概述</h3><p>OpenAI API 协议是目前最广泛使用的 AI API 标准，许多国内外厂商都提供了兼容接口，包括：</p>
+<ul>
+<li>阿里云通义千问（Qwen）</li>
+<li>DeepSeek</li>
+<li>智谱 AI（GLM）</li>
+<li>月之暗面（Kimi）</li>
+<li>百度文心一言(这个和似了其实区别不大)</li>
+</ul>
+<h3 id="核心端点（Endpoint）"><a href="#核心端点（Endpoint）" class="headerlink" title="核心端点（Endpoint）"></a>核心端点（Endpoint）</h3><p>主要的 API 端点是 <code>/v1/chat/completions</code>，用于对话式交互。</p>
+<h3 id="请求参数详解"><a href="#请求参数详解" class="headerlink" title="请求参数详解"></a>请求参数详解</h3><p>首先，让我们看一个完整的 API 请求示例，了解整体结构：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-3.5-turbo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;messages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;system&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个有帮助的 AI 助手，擅长回答技术问题。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;什么是机器学习？&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.7</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;max_tokens&quot;</span><span class="punctuation">:</span> <span class="number">2000</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stream&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stop&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们逐个解释这些参数的含义和用法。</p>
+<h4 id="必需参数"><a href="#必需参数" class="headerlink" title="必需参数"></a>必需参数</h4><p><strong>model</strong> (string)</p>
+<ul>
+<li>含义：指定要使用的模型名称</li>
+<li>示例：<code>&quot;gpt-3.5-turbo&quot;</code>、<code>&quot;deepseek-chat&quot;</code>、<code>&quot;qwen-turbo&quot;</code></li>
+<li>说明：不同服务商的模型名称不同，需查阅对应文档</li>
+</ul>
+<p><strong>messages</strong> (array)</p>
+<ul>
+<li>含义：对话历史记录，包含用户和助手的消息</li>
+<li>结构：每条消息是一个对象，包含 <code>role</code> 和 <code>content</code> 字段</li>
+<li>示例：</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;system&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个有帮助的助手&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;什么是机器学习？&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是...&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;能举个例子吗？&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>role 的类型</strong>：</p>
+<ul>
+<li><code>system</code>：系统提示词，定义 AI 的行为和角色</li>
+<li><code>user</code>：用户的输入</li>
+<li><code>assistant</code>：AI 的回复（可能包含 <code>tool_calls</code> 字段，表示需要调用工具）</li>
+<li><code>tool</code>：工具调用的返回结果（用于 Function Calling），必须包含：</li>
+<li><code>tool_call_id</code>：对应 assistant 消息中的工具调用 ID</li>
+<li><code>content</code>：工具执行的结果（通常是 JSON 字符串）</li>
+</ul>
+<h4 id="常用可选参数"><a href="#常用可选参数" class="headerlink" title="常用可选参数"></a>常用可选参数</h4><p><strong>temperature</strong> (number, 0-2)</p>
+<ul>
+<li>含义：控制输出的随机性</li>
+<li>默认值：有些模型通常为 1.0(但在实际生产中一般不需要自己调整这个)</li>
+<li>说明：</li>
+<li>接近 0：输出更确定、保守</li>
+<li>接近 2：输出更随机、创造性</li>
+<li>使用建议：代码生成用 0.2-0.5，创意写作用 0.7-1.2</li>
+</ul>
+<p><strong>max_tokens</strong> (integer)</p>
+<ul>
+<li>含义：生成的最大 token 数量</li>
+<li>说明：1 个 token 约等于 0.75 个英文单词，或 0.5 个中文字符(好像各家的说法都不太一样，这个简单了解即可)</li>
+<li>注意：设置过小可能导致回复被截断</li>
+</ul>
+<p><strong>stream</strong> (boolean)</p>
+<ul>
+<li>含义：是否启用流式输出</li>
+<li>默认值：false</li>
+<li>说明：</li>
+<li>true：逐字返回，适合实时显示</li>
+<li>false：等待完整响应后返回</li>
+</ul>
+<p><strong>stop</strong> (string or array)</p>
+<ul>
+<li>含义：停止序列，遇到时停止生成</li>
+<li>示例：<code>[&quot;###&quot;, &quot;END&quot;]</code></li>
+<li>用途：控制输出格式，防止生成过多内容</li>
+</ul>
+<p><strong>tools</strong> (array)</p>
+<ul>
+<li>含义：定义模型可以调用的工具（Function Calling）</li>
+<li>用途：让模型能够调用外部函数或 API</li>
+<li>详见后文 Tool Call 章节</li>
+</ul>
+<h3 id="响应格式"><a href="#响应格式" class="headerlink" title="响应格式"></a>响应格式</h3><p>成功响应示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chatcmpl-123&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chat.completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="number">1677652288</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-3.5-turbo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是人工智能的一个分支...&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stop&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usage&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prompt_tokens&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;completion_tokens&quot;</span><span class="punctuation">:</span> <span class="number">50</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;total_tokens&quot;</span><span class="punctuation">:</span> <span class="number">70</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>响应字段说明</strong>：</p>
+<ul>
+<li><code>id</code>：本次请求的唯一标识符</li>
+<li><code>object</code>：对象类型，通常为 <code>chat.completion</code></li>
+<li><code>created</code>：创建时间戳</li>
+<li><code>model</code>：实际使用的模型</li>
+<li><code>choices</code>：生成的回复列表（通常只有一个）</li>
+<li><code>index</code>：回复的索引</li>
+<li><code>message</code>：消息对象<ul>
+<li><code>role</code>：角色（assistant）</li>
+<li><code>content</code>：生成的文本内容</li>
+</ul>
+</li>
+<li><code>finish_reason</code>：结束原因<ul>
+<li><code>stop</code>：自然结束</li>
+<li><code>length</code>：达到 max_tokens 限制</li>
+<li><code>content_filter</code>：内容被过滤</li>
+<li><code>tool_calls</code>：需要调用工具</li>
+</ul>
+</li>
+<li><code>usage</code>：token 使用情况</li>
+<li><code>prompt_tokens</code>：输入消耗的 token</li>
+<li><code>completion_tokens</code>：输出消耗的 token</li>
+<li><code>total_tokens</code>：总计</li>
+</ul>
+<h2 id="Anthropic-Claude-API-协议详解"><a href="#Anthropic-Claude-API-协议详解" class="headerlink" title="Anthropic (Claude) API 协议详解"></a>Anthropic (Claude) API 协议详解</h2><h3 id="协议特点"><a href="#协议特点" class="headerlink" title="协议特点"></a>协议特点</h3><p>Claude API 协议与 OpenAI 有相似之处，但也有独特设计：</p>
+<ul>
+<li>更强调安全性和可控性</li>
+<li>支持更长的上下文窗口</li>
+<li>提供了更细粒度的控制选项</li>
+</ul>
+<h3 id="核心端点"><a href="#核心端点" class="headerlink" title="核心端点"></a>核心端点</h3><p>主要端点是 <code>/v1/messages</code>。</p>
+<h3 id="请求参数详解-1"><a href="#请求参数详解-1" class="headerlink" title="请求参数详解"></a>请求参数详解</h3><p>我们先看一个完整的 Claude API 请求示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;claude-3-5-sonnet-20241022&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;max_tokens&quot;</span><span class="punctuation">:</span> <span class="number">2000</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;system&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个有帮助的 AI 助手，擅长回答技术问题。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;messages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;什么是机器学习？&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.7</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里要注意一下 Claude API 与 OpenAI 的主要区别：</p>
+<ul>
+<li><code>system</code> 提示词是独立参数，不在 <code>messages</code> 数组中</li>
+<li><code>max_tokens</code> 是必需参数</li>
+<li><code>messages</code> 中不包含 <code>system</code> 角色的消息</li>
+</ul>
+<p>接下来详细解释各个参数：</p>
+<h4 id="必需参数-1"><a href="#必需参数-1" class="headerlink" title="必需参数"></a>必需参数</h4><p><strong>model</strong> (string)</p>
+<ul>
+<li>含义：指定要使用的 Claude 模型</li>
+<li>示例：<code>&quot;claude-3-5-sonnet-20241022&quot;</code>、<code>&quot;claude-3-opus-20240229&quot;</code>、<code>&quot;claude-3-haiku-20240307&quot;</code></li>
+<li>说明：不同模型在性能、速度和成本上有差异</li>
+</ul>
+<p><strong>messages</strong> (array)</p>
+<ul>
+<li>含义：对话消息列表</li>
+<li>结构与 OpenAI 类似，但有细微差异</li>
+<li>注意：Claude 的 system 提示词是单独的参数，不在 messages 中</li>
+<li>示例：</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;什么是机器学习？&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是人工智能的一个分支...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;能举个例子吗？&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>max_tokens</strong> (integer)</p>
+<ul>
+<li>含义：生成的最大 token 数量</li>
+<li>必需参数（与 OpenAI 不同，OpenAI 中是可选的）</li>
+<li>必须明确指定最大生成长度</li>
+<li>建议：根据实际需求设置，避免设置过大浪费成本</li>
+</ul>
+<h4 id="可选参数"><a href="#可选参数" class="headerlink" title="可选参数"></a>可选参数</h4><p><strong>system</strong> (string)</p>
+<ul>
+<li>含义：系统提示词，定义 AI 的行为和角色</li>
+<li>独立参数，不在 messages 数组中</li>
+<li>示例：<code>&quot;你是一个专业的 Python 编程助手，代码要简洁高效。&quot;</code></li>
+</ul>
+<p><strong>temperature</strong> (number, 0-1)</p>
+<ul>
+<li>范围：0 到 1（注意：Claude 的范围是 0-1，而 OpenAI 是 0-2）</li>
+<li>默认值：1.0</li>
+</ul>
+<h3 id="响应格式-1"><a href="#响应格式-1" class="headerlink" title="响应格式"></a>响应格式</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg_01XFDUDYJgAACzvnptvVoYEL&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是...&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;claude-3-5-sonnet-20241022&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stop_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;end_turn&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usage&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;input_tokens&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;output_tokens&quot;</span><span class="punctuation">:</span> <span class="number">50</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他-AI-协议和工具简介"><a href="#其他-AI-协议和工具简介" class="headerlink" title="其他 AI 协议和工具简介"></a>其他 AI 协议和工具简介</h2><h3 id="Google-Gemini-API-协议详解"><a href="#Google-Gemini-API-协议详解" class="headerlink" title="Google Gemini API 协议详解"></a>Google Gemini API 协议详解</h3><p>Google Gemini 是一个强大的多模态 AI 模型，支持文本、图像、音频、视频等多种输入。</p>
+<h4 id="协议特点-1"><a href="#协议特点-1" class="headerlink" title="协议特点"></a>协议特点</h4><ul>
+<li><strong>原生多模态</strong>：无需额外配置即可处理文本、图像、音频、视频</li>
+<li><strong>独特的消息结构</strong>：使用 <code>contents</code> 和 <code>parts</code> 而非 <code>messages</code></li>
+<li><strong>Gemini 3 新特性</strong>：</li>
+<li>支持 <code>thinking_level</code> 控制推理深度</li>
+<li>引入 <code>thought_signature</code> 维持多轮对话逻辑连贯</li>
+<li>函数调用支持唯一 <code>id</code>，实现并行调用</li>
+<li>函数结果使用专门的 <code>tool</code> 角色</li>
+</ul>
+<h4 id="核心端点-1"><a href="#核心端点-1" class="headerlink" title="核心端点"></a>核心端点</h4><p>主要端点是 <code>/v1beta/models/{model}:generateContent</code>，用于生成内容。</p>
+<h4 id="请求参数详解-2"><a href="#请求参数详解-2" class="headerlink" title="请求参数详解"></a>请求参数详解</h4><p>首先看一个完整的 Gemini API 请求示例（使用 REST API）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// --- 系统指令（可选但推荐） ---</span></span><br><span class="line">  <span class="attr">&quot;system_instruction&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个专业的 AI 助手，擅长解释技术概念。请用清晰、易懂的语言回答问题。&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// --- 对话内容 ---</span></span><br><span class="line">  <span class="attr">&quot;contents&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;什么是机器学习？请详细解释。&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// --- 生成配置 ---</span></span><br><span class="line">  <span class="attr">&quot;generationConfig&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.7</span><span class="punctuation">,</span> <span class="comment">// 1. 控制随机性 (0-2)</span></span><br><span class="line">    <span class="attr">&quot;topP&quot;</span><span class="punctuation">:</span> <span class="number">0.95</span><span class="punctuation">,</span> <span class="comment">// 2. 核采样阈值</span></span><br><span class="line">    <span class="attr">&quot;topK&quot;</span><span class="punctuation">:</span> <span class="number">40</span><span class="punctuation">,</span> <span class="comment">// 3. 候选 token 数量</span></span><br><span class="line">    <span class="attr">&quot;maxOutputTokens&quot;</span><span class="punctuation">:</span> <span class="number">2048</span><span class="punctuation">,</span> <span class="comment">// 4. 最大输出长度</span></span><br><span class="line">    <span class="attr">&quot;stopSequences&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="comment">// 停止序列</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// --- Gemini 3 核心新参数 ---</span></span><br><span class="line">    <span class="attr">&quot;thinking_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HIGH&quot;</span> <span class="comment">// 5. 【核心】替代旧版 budget，控制推理深度 (MINIMAL/MEDIUM/HIGH)</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// --- 安全设置 ---</span></span><br><span class="line">  <span class="attr">&quot;safetySettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;category&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HARM_CATEGORY_HARASSMENT&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;threshold&quot;</span><span class="punctuation">:</span> <span class="string">&quot;BLOCK_MEDIUM_AND_ABOVE&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="必需参数-2"><a href="#必需参数-2" class="headerlink" title="必需参数"></a>必需参数</h4><p><strong>contents</strong> (array)</p>
+<ul>
+<li>含义：对话内容列表，包含用户和模型的消息</li>
+<li>结构：每个 content 包含 <code>role</code> 和 <code>parts</code> 字段</li>
+<li>角色类型：</li>
+<li><code>user</code>：用户输入</li>
+<li><code>model</code>：模型回复（注意：不是 <code>assistant</code>）</li>
+<li><code>tool</code>：工具&#x2F;函数调用结果（Gemini 3 新增）</li>
+<li>示例：</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;contents&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好，请介绍一下自己&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;model&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好！我是 Gemini，一个由 Google 开发的 AI 助手...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你能做什么？&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>parts</strong> (array)</p>
+<ul>
+<li>含义：消息的组成部分，支持多种类型</li>
+<li>类型：</li>
+<li><code>text</code>：文本内容</li>
+<li><code>inline_data</code>：内联数据（如图像的 base64）</li>
+<li><code>file_data</code>：文件引用</li>
+<li><code>function_call</code>：函数调用请求（模型生成）</li>
+<li><code>function_response</code>：函数调用结果（用户返回）</li>
+</ul>
+<h4 id="可选参数-1"><a href="#可选参数-1" class="headerlink" title="可选参数"></a>可选参数</h4><p><strong>generationConfig</strong> (object)</p>
+<p>生成配置对象，控制输出行为：</p>
+<ul>
+<li><p><code>temperature</code> (number, 0-2)：控制随机性</p>
+</li>
+<li><p><code>topP</code> (number, 0-1)：核采样参数，默认 0.95</p>
+</li>
+<li><p><code>topK</code> (integer)：Top-K 采样，默认 40</p>
+</li>
+<li><p><code>maxOutputTokens</code> (integer)：最大输出 token 数，默认 2048</p>
+</li>
+<li><p><code>stopSequences</code> (array)：停止序列列表</p>
+</li>
+<li><p><code>candidateCount</code> (integer)：生成候选数量，默认 1</p>
+</li>
+<li><p><code>thinking_level</code> (string)：推理深度（Gemini 3 新增）</p>
+</li>
+<li><p><code>MINIMAL</code>：快速响应，适合简单问题</p>
+</li>
+<li><p><code>MEDIUM</code>：平衡速度和质量</p>
+</li>
+<li><p><code>HIGH</code>：深度推理，适合复杂问题</p>
+</li>
+</ul>
+<p><strong>safetySettings</strong> (array)</p>
+<p>  安全设置，控制内容过滤：</p>
+<ul>
+<li>类别：</li>
+<li><code>HARM_CATEGORY_HARASSMENT</code>：骚扰</li>
+<li><code>HARM_CATEGORY_HATE_SPEECH</code>：仇恨言论</li>
+<li><code>HARM_CATEGORY_SEXUALLY_EXPLICIT</code>：色情内容</li>
+<li><code>HARM_CATEGORY_DANGEROUS_CONTENT</code>：危险内容</li>
+<li>阈值：</li>
+<li><code>BLOCK_NONE</code>：不阻止</li>
+<li><code>BLOCK_ONLY_HIGH</code>：仅阻止高风险</li>
+<li><code>BLOCK_MEDIUM_AND_ABOVE</code>：阻止中等及以上风险</li>
+<li><code>BLOCK_LOW_AND_ABOVE</code>：阻止低等及以上风险</li>
+</ul>
+<p>  <strong>systemInstruction</strong> (object)</p>
+<p>  系统指令，类似 OpenAI 的 system message：</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;systemInstruction&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个专业的 Python 编程助手，代码要简洁高效。&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;contents&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>...<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="响应格式-2"><a href="#响应格式-2" class="headerlink" title="响应格式"></a>响应格式</h4><p>  2026 最新 Gemini 3 响应示例 (JSON)：</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;candidates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;model&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;parts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="comment">// 1. 【新增】推理思考过程（仅在开启 thinking_level 时出现）</span></span><br><span class="line">            <span class="attr">&quot;thought&quot;</span><span class="punctuation">:</span> <span class="string">&quot;首先，我需要定义机器学习的三个核心要素：数据、算法和模型。然后...&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是人工智能的一个分支，它使计算机系统能够从数据中学习并改进，而无需明确编程...&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="comment">// 2. 【核心新增】思维签名，用于多轮对话维持逻辑连贯</span></span><br><span class="line">        <span class="attr">&quot;thought_signature&quot;</span><span class="punctuation">:</span> <span class="string">&quot;asdf897asdf_logic_chain_v3&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;finishReason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;STOP&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;safetyRatings&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;category&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HARM_CATEGORY_HARASSMENT&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;probability&quot;</span><span class="punctuation">:</span> <span class="string">&quot;NEGLIGIBLE&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;blocked&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span> <span class="comment">// 新增：更直观的布尔值判断</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;avg_logprobs&quot;</span><span class="punctuation">:</span> <span class="number">-0.15</span><span class="punctuation">,</span> <span class="comment">// 3. 【新增】平均对数概率，用于评估回答的置信度</span></span><br><span class="line">      <span class="attr">&quot;groundingMetadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="comment">// 4. 【增强】联网搜索溯源</span></span><br><span class="line">        <span class="attr">&quot;searchEntryPoint&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;renderedContent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;groundingChunks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;web&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[https://wikipedia.org/](https://wikipedia.org/)...&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Machine Learning&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usageMetadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;promptTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;candidatesTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">150</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;totalTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">160</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// 5. 【新增】分项计费统计</span></span><br><span class="line">    <span class="attr">&quot;cachedContentTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;reasoningTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">45</span><span class="punctuation">,</span> <span class="comment">// 思考过程消耗的 Token</span></span><br><span class="line">    <span class="attr">&quot;mediaTokenCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>  <strong>Gemini 3 核心新增字段说明</strong>：</p>
+<ul>
+<li><code>parts[].thought</code>：推理思考过程（需开启 <code>thinking_level</code>）</li>
+<li><code>thought_signature</code>：思维签名，用于多轮对话维持逻辑连贯性</li>
+<li><strong>重要</strong>：在函数调用的多轮交互中，必须将 <code>thought_signature</code> 包含在历史记录中，否则模型会丢失”为什么要调用这个函数”的逻辑上下文</li>
+<li><code>avg_logprobs</code>：平均对数概率，评估回答置信度（越接近 0 越自信）</li>
+<li><code>groundingMetadata</code>：联网搜索溯源信息</li>
+<li><code>searchEntryPoint</code>：搜索入口</li>
+<li><code>groundingChunks</code>：引用的网页来源</li>
+<li><code>usageMetadata</code> 新增字段：</li>
+<li><code>cachedContentTokenCount</code>：缓存内容 Token 数</li>
+<li><code>reasoningTokenCount</code>：推理过程消耗的 Token</li>
+<li><code>mediaTokenCount</code>：多模态内容消耗的 Token</li>
+</ul>
+<p>  <strong>通用响应字段说明</strong>：</p>
+<ul>
+<li><code>finishReason</code>：结束原因</li>
+<li><code>STOP</code>：自然结束</li>
+<li><code>MAX_TOKENS</code>：达到最大 token 限制</li>
+<li><code>SAFETY</code>：触发安全过滤</li>
+<li><code>RECITATION</code>：检测到重复内容</li>
+<li><code>safetyRatings</code>：安全评级</li>
+<li><code>category</code>：安全类别</li>
+<li><code>probability</code>：风险概率（NEGLIGIBLE&#x2F;LOW&#x2F;MEDIUM&#x2F;HIGH）</li>
+<li><code>blocked</code>：是否被阻止</li>
+</ul>
+<h4 id="函数调用（Function-Calling）"><a href="#函数调用（Function-Calling）" class="headerlink" title="函数调用（Function Calling）"></a>函数调用（Function Calling）</h4><p>  <strong>Gemini 3 函数调用的关键变化</strong>：</p>
+<ol>
+<li><p><strong>强制要求 ID 匹配</strong>：为了支持并行函数调用（Parallel Function Calling）和复杂的长程推理，Gemini 3 现在生成的 <code>function_call</code> 对象中包含一个唯一的 <code>id</code>。当你返回 <code>function_response</code> 时，必须带上对应的 <code>id</code>，否则在多轮对话或并行调用时，模型会因为无法对齐”哪个结果对应哪个请求”而报错（400 Error）。</p>
+</li>
+<li><p><strong>思维签名（thought_signature）</strong>：在函数调用的多轮交互中，你必须确保模型返回的 <code>thought_signature</code> 被包含在历史记录中，否则模型会丢失”为什么要调用这个函数”的逻辑上下文。</p>
+</li>
+<li><p><strong>专门的 tool 角色</strong>：虽然在某些早期实现中会将函数结果标记为 <code>user</code> 角色，但 Gemini 3 的标准做法是引入了专门的 <code>tool</code> 角色（或在某些 SDK 中称为 <code>function</code> 角色）。将函数结果发回给模型时，消息的 <code>role</code> 应当设为 <code>tool</code> 或 <code>function</code>，而不是 <code>user</code>。这有助于模型区分”用户说的话”和”工具返回的客观事实”。</p>
+</li>
+</ol>
+<h4 id="与-OpenAI-协议的主要区别"><a href="#与-OpenAI-协议的主要区别" class="headerlink" title="与 OpenAI 协议的主要区别"></a>与 OpenAI 协议的主要区别</h4><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>OpenAI</th>
+<th>Gemini</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息结构</td>
+<td><code>messages</code></td>
+<td><code>contents</code></td>
+</tr>
+<tr>
+<td>消息组成</td>
+<td><code>content</code> (string)</td>
+<td><code>parts</code> (array)</td>
+</tr>
+<tr>
+<td>助手角色名</td>
+<td><code>assistant</code></td>
+<td><code>model</code></td>
+</tr>
+<tr>
+<td>工具结果角色</td>
+<td><code>tool</code></td>
+<td><code>tool</code> (Gemini 3)</td>
+</tr>
+<tr>
+<td>系统提示</td>
+<td><code>role: &quot;system&quot;</code></td>
+<td><code>systemInstruction</code></td>
+</tr>
+<tr>
+<td>生成配置</td>
+<td>顶层参数</td>
+<td><code>generationConfig</code> 对象</td>
+</tr>
+<tr>
+<td>安全设置</td>
+<td>无（依赖内容审核）</td>
+<td><code>safetySettings</code> 数组</td>
+</tr>
+<tr>
+<td>多模态支持</td>
+<td>需要特殊格式</td>
+<td>原生支持，使用 parts 数组</td>
+</tr>
+<tr>
+<td>推理深度控制</td>
+<td>无</td>
+<td><code>thinking_level</code></td>
+</tr>
+<tr>
+<td>思维签名</td>
+<td>无</td>
+<td><code>thought_signature</code></td>
+</tr>
+<tr>
+<td>函数调用 ID</td>
+<td><code>tool_calls[].id</code></td>
+<td><code>function_call.id</code></td>
+</tr>
+<tr>
+<td>函数结果 ID</td>
+<td><code>tool_call_id</code></td>
+<td><code>function_response.id</code></td>
+</tr>
+<tr>
+<td>函数参数格式</td>
+<td>JSON 字符串</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>联网搜索溯源</td>
+<td>无</td>
+<td><code>groundingMetadata</code></td>
+</tr>
+<tr>
+<td>Token 分项统计</td>
+<td>基础统计</td>
+<td>详细分项（推理、媒体等）</td>
+</tr>
+</tbody></table>
+<h4 id="获取-API-Key"><a href="#获取-API-Key" class="headerlink" title="获取 API Key"></a>获取 API Key</h4><ol>
+<li>访问 <a target="_blank" rel="noopener" href="https://makersuite.google.com/app/apikey">Google AI Studio</a></li>
+<li>登录 Google 账号</li>
+<li>点击 “Get API Key” 创建新的 API Key</li>
+<li>复制 API Key 并保存到环境变量</li>
+</ol>
+<h4 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h4><ol>
+<li><strong>多模态优势</strong>：充分利用原生多模态能力，无需额外配置</li>
+<li><strong>安全设置</strong>：根据应用场景调整安全阈值</li>
+<li><strong>流式输出</strong>：对于长回复，使用流式输出提升用户体验</li>
+<li><strong>函数调用</strong>：利用 Function Calling 实现复杂的工具集成</li>
+</ol>
+<h2 id="流式输出（Streaming）详解"><a href="#流式输出（Streaming）详解" class="headerlink" title="流式输出（Streaming）详解"></a>流式输出（Streaming）详解</h2><h3 id="流式输出是什么东西？"><a href="#流式输出是什么东西？" class="headerlink" title="流式输出是什么东西？"></a>流式输出是什么东西？</h3><p>  流式输出是指 AI 模型逐步生成并返回响应内容，而不是等待全部内容生成完毕后一次性返回。</p>
+<h4 id="非流式-vs-流式"><a href="#非流式-vs-流式" class="headerlink" title="非流式 vs 流式"></a>非流式 vs 流式</h4><p>  <strong>非流式输出</strong>：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户提问 → AI 思考 → 等待... → 完整回复一次性显示</span><br></pre></td></tr></table></figure>
+
+<p>  用户体验：需要等待较长时间，看到的是突然出现的完整文本。</p>
+<p>  <strong>流式输出</strong>：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户提问 → AI 思考 → 逐字显示 → 逐字显示 → 逐字显示 → 完成</span><br></pre></td></tr></table></figure>
+
+<p>  用户体验：立即看到响应开始，文字逐渐出现，类似打字效果。</p>
+<h4 id="流式输出有什么用？"><a href="#流式输出有什么用？" class="headerlink" title="流式输出有什么用？"></a>流式输出有什么用？</h4><p>  在大语言模型（LLM）爆发之前，普通的网页请求（比如看新闻、查天气）基本都是“全量返回”的：服务器把所有内容一次性计算好、打包，再传给浏览器，由浏览器统一渲染。但在大模型时代，这种方式就不太合适了。因为模型本质上是一个“概率预测器”，它不是一次性生成整段内容，而是按 Token（字&#x2F;词）逐步向外预测、逐步生成的。如果仍然等到 LLM 把所有内容都生成完再“全量返回”，用户往往需要经历较长的等待时间，体验会明显变差。在这种情况下，流式输出就显得很有必要：</p>
+<ol>
+<li><strong>改善用户体验</strong>：用户不需要长时间等待，立即看到响应开始</li>
+<li><strong>降低感知延迟</strong>：即使总时间相同，流式输出让用户感觉更快</li>
+<li><strong>实时反馈</strong>：用户可以提前看到部分内容，决定是否继续等待</li>
+<li><strong>处理长文本</strong>：对于长回复，流式输出避免了长时间的空白等待</li>
+</ol>
+<h3 id="来讲讲-SSE（Server-Sent-Events）"><a href="#来讲讲-SSE（Server-Sent-Events）" class="headerlink" title="来讲讲 SSE（Server-Sent Events）"></a>来讲讲 SSE（Server-Sent Events）</h3><p>  SSE（Server-Sent Events）是一种服务器向客户端推送数据的技术，AI API 的流式输出就是基于 SSE 实现的。</p>
+<h4 id="SSE-的特点"><a href="#SSE-的特点" class="headerlink" title="SSE 的特点"></a>SSE 的特点</h4><ol>
+<li><strong>单向通信</strong>：服务器 → 客户端（客户端不能通过 SSE 发送数据）</li>
+<li><strong>基于 HTTP</strong>：使用标准 HTTP 协议，无需特殊协议</li>
+<li><strong>自动重连</strong>：连接断开后会自动重连</li>
+<li><strong>文本格式</strong>：传输的是文本数据，通常是 JSON</li>
+</ol>
+<h4 id="SSE-的数据格式"><a href="#SSE-的数据格式" class="headerlink" title="SSE 的数据格式"></a>SSE 的数据格式</h4><p>  SSE 使用特定的文本格式传输数据：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data: &#123;&quot;content&quot;: &quot;你&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;content&quot;: &quot;好&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;content&quot;: &quot;，&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;content&quot;: &quot;我&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;content&quot;: &quot;是&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: [DONE]</span><br></pre></td></tr></table></figure>
+
+<p>  每条消息以 <code>data:</code> 开头，以两个换行符 <code>\n\n</code> 结束。</p>
+<h3 id="SSE-vs-WebSocket"><a href="#SSE-vs-WebSocket" class="headerlink" title="SSE vs WebSocket"></a>SSE vs WebSocket</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SSE</th>
+<th>WebSocket</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通信方向</td>
+<td>单向（服务器 → 客户端）</td>
+<td>双向（客户端 ↔ 服务器）</td>
+</tr>
+<tr>
+<td>协议</td>
+<td>HTTP</td>
+<td>WebSocket 协议（ws:&#x2F;&#x2F;）</td>
+</tr>
+<tr>
+<td>连接建立</td>
+<td>简单，标准 HTTP 请求</td>
+<td>需要握手升级</td>
+</tr>
+<tr>
+<td>浏览器支持</td>
+<td>原生支持（EventSource API）</td>
+<td>原生支持（WebSocket API）</td>
+</tr>
+<tr>
+<td>自动重连</td>
+<td>内置自动重连</td>
+<td>需要手动实现</td>
+</tr>
+<tr>
+<td>数据格式</td>
+<td>文本（通常 JSON）</td>
+<td>文本或二进制</td>
+</tr>
+<tr>
+<td>防火墙友好</td>
+<td>是（使用标准 HTTP）</td>
+<td>可能被阻止</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>服务器推送、实时通知、AI 流式</td>
+<td>聊天、游戏、实时协作</td>
+</tr>
+</tbody></table>
+<h4 id="为什么-AI-API-使用-SSE-而不是-WebSocket？"><a href="#为什么-AI-API-使用-SSE-而不是-WebSocket？" class="headerlink" title="为什么 AI API 使用 SSE 而不是 WebSocket？"></a>为什么 AI API 使用 SSE 而不是 WebSocket？</h4><ol>
+<li><strong>单向通信足够</strong>：AI 生成响应是单向的，不需要双向通信</li>
+<li><strong>更简单</strong>：SSE 基于 HTTP，无需额外的协议升级</li>
+<li><strong>更好的兼容性</strong>：HTTP 更容易通过代理、负载均衡器</li>
+<li><strong>自动重连</strong>：SSE 内置重连机制，更可靠</li>
+<li><strong>标准化</strong>：OpenAI 等厂商都采用 SSE，已成为事实标准</li>
+</ol>
+<h3 id="如何实现流式输出"><a href="#如何实现流式输出" class="headerlink" title="如何实现流式输出"></a>如何实现流式输出</h3><p>  在实现流式输出之前，我们需要理解其背后的工作原理和处理逻辑。</p>
+<h4 id="流式输出的工作原理"><a href="#流式输出的工作原理" class="headerlink" title="流式输出的工作原理"></a>流式输出的工作原理</h4><p>  <strong>1. 服务器端的生成过程</strong></p>
+<p>  AI 模型生成文本的过程本质上是逐个 token 预测的：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;什么是机器学习？&quot;</span><br><span class="line">↓</span><br><span class="line">模型预测: &quot;机&quot; (第1个token)</span><br><span class="line">↓</span><br><span class="line">模型预测: &quot;器&quot; (第2个token，基于前面的上下文)</span><br><span class="line">↓</span><br><span class="line">模型预测: &quot;学&quot; (第3个token)</span><br><span class="line">↓</span><br><span class="line">... 持续预测直到结束</span><br></pre></td></tr></table></figure>
+
+<p>  在非流式模式下，服务器会等待所有 token 生成完毕后，一次性返回完整结果。而在流式模式下，服务器每生成一个或几个 token，就立即通过 SSE 推送给客户端。</p>
+<p>  <strong>2. SSE 数据传输格式</strong></p>
+<p>  服务器通过 SSE 发送的数据格式如下：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data: &#123;&quot;id&quot;:&quot;chatcmpl-123&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;index&quot;:0,&quot;delta&quot;:&#123;&quot;content&quot;:&quot;机&quot;&#125;,&quot;finish_reason&quot;:null&#125;]&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;id&quot;:&quot;chatcmpl-123&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;index&quot;:0,&quot;delta&quot;:&#123;&quot;content&quot;:&quot;器&quot;&#125;,&quot;finish_reason&quot;:null&#125;]&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;id&quot;:&quot;chatcmpl-123&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;index&quot;:0,&quot;delta&quot;:&#123;&quot;content&quot;:&quot;学&quot;&#125;,&quot;finish_reason&quot;:null&#125;]&#125;</span><br><span class="line"></span><br><span class="line">data: [DONE]</span><br></pre></td></tr></table></figure>
+
+<p>  每条消息：</p>
+<ul>
+<li>以 <code>data:</code> 开头</li>
+<li>包含一个 JSON 对象（称为 chunk）</li>
+<li>以两个换行符 <code>\n\n</code> 结束</li>
+<li>最后一条消息是 <code>data: [DONE]</code> 表示流结束</li>
+</ul>
+<p>  <strong>3. 客户端的处理流程</strong></p>
+<p>  客户端需要按照以下步骤处理流式响应：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 建立 HTTP 连接（设置 stream=True）</span><br><span class="line">   ↓</span><br><span class="line">2. 持续监听服务器推送的数据</span><br><span class="line">   ↓</span><br><span class="line">3. 每收到一个 chunk：</span><br><span class="line">   - 解析 JSON 数据</span><br><span class="line">   - 提取 delta.content（本次新增的内容）</span><br><span class="line">   - 立即显示给用户</span><br><span class="line">   - 累积到完整内容中</span><br><span class="line">   ↓</span><br><span class="line">4. 检测到 finish_reason 不为 null 或收到 [DONE]</span><br><span class="line">   ↓</span><br><span class="line">5. 关闭连接，流式输出完成</span><br></pre></td></tr></table></figure>
+
+<p>  <strong>关于 SSE 的”粘包”处理（重要）</strong></p>
+<p>  由于网络传输的特性，客户端收到的一个数据块并不一定正好是一个完整的 <code>data: {...}\n\n</code>。</p>
+<p>  常见现象：</p>
+<ul>
+<li>有时一次读到两个完整的 chunk</li>
+<li>有时只读到半个 chunk（JSON 被截断）</li>
+<li>有时一个 chunk 被拆分到多次读取中</li>
+</ul>
+<p>  解决方案：</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户端需要维护一个缓冲区</span></span><br><span class="line">buffer = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> response.iter_content():</span><br><span class="line">    <span class="comment"># 1. 将新数据追加到缓冲区</span></span><br><span class="line">    buffer += chunk.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 寻找完整的消息（以 \n\n 分隔）</span></span><br><span class="line">    <span class="keyword">while</span> <span class="string">&#x27;\n\n&#x27;</span> <span class="keyword">in</span> buffer:</span><br><span class="line">        <span class="comment"># 3. 提取一个完整的消息</span></span><br><span class="line">        message, buffer = buffer.split(<span class="string">&#x27;\n\n&#x27;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 4. 解析并处理</span></span><br><span class="line">        <span class="keyword">if</span> message.startswith(<span class="string">&#x27;data: &#x27;</span>):</span><br><span class="line">            data = message[<span class="number">6</span>:]  <span class="comment"># 去掉 &quot;data: &quot; 前缀</span></span><br><span class="line">            <span class="keyword">if</span> data == <span class="string">&#x27;[DONE]&#x27;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            json_obj = json.loads(data)</span><br><span class="line">            <span class="comment"># 处理 json_obj...</span></span><br></pre></td></tr></table></figure>
+
+<p>  关键点：</p>
+<ul>
+<li>使用缓冲区累积接收到的数据</li>
+<li>只有找到 <code>\n\n</code> 分隔符时才解析</li>
+<li>未完成的部分保留在缓冲区中，等待下次数据到达</li>
+</ul>
+<p>  <strong>4. 关键技术点</strong></p>
+<ul>
+<li><strong>增量更新（Delta）</strong>：每个 chunk 只包含新增的内容片段，不是完整内容</li>
+<li><strong>实时显示</strong>：使用 <code>print(..., end=&quot;&quot;, flush=True)</code> 或类似机制立即输出，不等待换行</li>
+<li><strong>内容累积</strong>：客户端需要自己拼接所有 chunk 的内容，得到完整文本</li>
+<li><strong>结束检测</strong>：通过 <code>finish_reason</code> 字段判断是否结束（<code>stop</code>、<code>length</code> 等）</li>
+</ul>
+<p>  <strong>性能优化：Flush 机制</strong></p>
+<p>  在实际部署中，如果后端服务器（如 Nginx）开启了缓存（Buffering），流式效果会失效——文字会一坨一坨地蹦出来，而不是平滑流出。</p>
+<p>  问题原因：</p>
+<ul>
+<li>Nginx 等反向代理默认会缓冲响应内容</li>
+<li>只有缓冲区满了或响应结束时才会发送给客户端</li>
+<li>这导致流式传输的实时性丧失</li>
+</ul>
+<p>  解决方案：</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 后端代码中必须设置响应头</span></span><br><span class="line">response.headers[<span class="string">&#x27;X-Accel-Buffering&#x27;</span>] = <span class="string">&#x27;no&#x27;</span>  <span class="comment"># 针对 Nginx</span></span><br><span class="line">response.headers[<span class="string">&#x27;Cache-Control&#x27;</span>] = <span class="string">&#x27;no-cache&#x27;</span></span><br><span class="line">response.headers[<span class="string">&#x27;Connection&#x27;</span>] = <span class="string">&#x27;keep-alive&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>  Nginx 配置（可选）：</p>
+  <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span> /api/chat &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">    <span class="attribute">proxy_buffering</span> <span class="literal">off</span>;  <span class="comment"># 关闭缓冲</span></span><br><span class="line">    <span class="attribute">proxy_cache</span> <span class="literal">off</span>;      <span class="comment"># 关闭缓存</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  确保每一个 chunk 都能实时流出，不被中间层缓存。</p>
+<p>  <strong>5. 流式 vs 非流式的数据对比</strong></p>
+<p>  非流式响应（一次性返回）：</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机器学习是人工智能的一个分支...&quot;</span> <span class="comment">// 完整内容</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stop&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>  流式响应（多次返回）：</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第1次</span></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;机&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第2次</span></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;器&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第3次</span></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;学&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 最后一次</span></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stop&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>  注意：</p>
+<ul>
+<li>流式使用 <code>delta</code> 字段（增量），非流式使用 <code>message</code> 字段（完整）</li>
+<li>流式的 <code>finish_reason</code> 在最后一个 chunk 才不为 null</li>
+<li>流式需要客户端自己拼接所有 <code>delta.content</code></li>
+</ul>
+<p>  <strong>6. Delta 模式的例外：工具调用（Function Calling）</strong></p>
+<p>  当涉及到 Function Calling 时，流式的 delta 结构会发生变化。函数参数是以字符串形式逐段传输的：</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第1个 chunk：开始传输函数调用</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_abc123&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;function&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第2个 chunk：传输参数的第一部分</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;\&quot;locat&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第3个 chunk：传输参数的第二部分</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ion\&quot;: \&quot;Shang&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第4个 chunk：传输参数的最后部分</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hai\&quot;&#125;&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 最后一个 chunk</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;delta&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_calls&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>  处理要点：</p>
+<ul>
+<li>函数参数（<code>arguments</code>）是 JSON 字符串，会被拆分成多个片段</li>
+<li>客户端需要拼接所有 <code>arguments</code> 片段，最后再解析为 JSON 对象</li>
+<li>完整的参数示例：<code>{&quot;location&quot;: &quot;Shanghai&quot;}</code></li>
+<li><code>finish_reason</code> 为 <code>&quot;tool_calls&quot;</code> 表示需要执行工具调用</li>
+</ul>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户端处理示例</span></span><br><span class="line">tool_calls = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">    delta = chunk[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;delta&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;tool_calls&#x27;</span> <span class="keyword">in</span> delta:</span><br><span class="line">        <span class="keyword">for</span> tool_call <span class="keyword">in</span> delta[<span class="string">&#x27;tool_calls&#x27;</span>]:</span><br><span class="line">            index = tool_call[<span class="string">&#x27;index&#x27;</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 初始化工具调用</span></span><br><span class="line">            <span class="keyword">if</span> index <span class="keyword">not</span> <span class="keyword">in</span> tool_calls:</span><br><span class="line">                tool_calls[index] = &#123;</span><br><span class="line">                    <span class="string">&#x27;id&#x27;</span>: tool_call.get(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">                    <span class="string">&#x27;type&#x27;</span>: tool_call.get(<span class="string">&#x27;type&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">                    <span class="string">&#x27;function&#x27;</span>: &#123;</span><br><span class="line">                        <span class="string">&#x27;name&#x27;</span>: tool_call.get(<span class="string">&#x27;function&#x27;</span>, &#123;&#125;).get(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">                        <span class="string">&#x27;arguments&#x27;</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 累积参数字符串</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;function&#x27;</span> <span class="keyword">in</span> tool_call <span class="keyword">and</span> <span class="string">&#x27;arguments&#x27;</span> <span class="keyword">in</span> tool_call[<span class="string">&#x27;function&#x27;</span>]:</span><br><span class="line">                tool_calls[index][<span class="string">&#x27;function&#x27;</span>][<span class="string">&#x27;arguments&#x27;</span>] += tool_call[<span class="string">&#x27;function&#x27;</span>][<span class="string">&#x27;arguments&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 流结束后，解析完整的参数</span></span><br><span class="line"><span class="keyword">for</span> tool_call <span class="keyword">in</span> tool_calls.values():</span><br><span class="line">    args_str = tool_call[<span class="string">&#x27;function&#x27;</span>][<span class="string">&#x27;arguments&#x27;</span>]</span><br><span class="line">    tool_call[<span class="string">&#x27;function&#x27;</span>][<span class="string">&#x27;arguments&#x27;</span>] = json.loads(args_str)</span><br></pre></td></tr></table></figure>
+
+<h4 id="JavaScript-实现"><a href="#JavaScript-实现" class="headerlink" title="JavaScript 实现"></a>JavaScript 实现</h4><p>  <strong>使用 OpenAI SDK</strong>：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">OpenAI</span> <span class="keyword">from</span> <span class="string">&quot;openai&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = <span class="keyword">new</span> <span class="title class_">OpenAI</span>(&#123;</span><br><span class="line">  <span class="attr">apiKey</span>: process.<span class="property">env</span>.<span class="property">OPENAI_API_KEY</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">streamChat</span>(<span class="params">userMessage</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> stream = <span class="keyword">await</span> client.<span class="property">chat</span>.<span class="property">completions</span>.<span class="title function_">create</span>(&#123;</span><br><span class="line">    <span class="attr">model</span>: <span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">    <span class="attr">messages</span>: [&#123; <span class="attr">role</span>: <span class="string">&quot;user&quot;</span>, <span class="attr">content</span>: userMessage &#125;],</span><br><span class="line">    <span class="attr">stream</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">&quot;AI: &quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> <span class="title function_">await</span> (<span class="keyword">const</span> chunk <span class="keyword">of</span> stream) &#123;</span><br><span class="line">    <span class="keyword">const</span> content = chunk.<span class="property">choices</span>[<span class="number">0</span>]?.<span class="property">delta</span>?.<span class="property">content</span> || <span class="string">&quot;&quot;</span>;</span><br><span class="line">    process.<span class="property">stdout</span>.<span class="title function_">write</span>(content);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="title function_">streamChat</span>(<span class="string">&quot;介绍一下 JavaScript 的闭包&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>  <strong>使用原生 Fetch API</strong>：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">streamChatFetch</span>(<span class="params">userMessage</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&quot;[https://api.openai.com/v1/chat/completions](https://api.openai.com/v1/chat/completions)&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">      <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">      <span class="title class_">Authorization</span>: <span class="string">`Bearer <span class="subst">$&#123;process.env.OPENAI_API_KEY&#125;</span>`</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">      <span class="attr">model</span>: <span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">      <span class="attr">messages</span>: [&#123; <span class="attr">role</span>: <span class="string">&quot;user&quot;</span>, <span class="attr">content</span>: userMessage &#125;],</span><br><span class="line">      <span class="attr">stream</span>: <span class="literal">true</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> reader = response.<span class="property">body</span>.<span class="title function_">getReader</span>();</span><br><span class="line">  <span class="keyword">const</span> decoder = <span class="keyword">new</span> <span class="title class_">TextDecoder</span>();</span><br><span class="line"></span><br><span class="line">  process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">&quot;AI: &quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; done, value &#125; = <span class="keyword">await</span> reader.<span class="title function_">read</span>();</span><br><span class="line">    <span class="keyword">if</span> (done) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解码数据</span></span><br><span class="line">    <span class="keyword">const</span> chunk = decoder.<span class="title function_">decode</span>(value);</span><br><span class="line">    <span class="keyword">const</span> lines = chunk.<span class="title function_">split</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> line <span class="keyword">of</span> lines) &#123;</span><br><span class="line">      <span class="keyword">if</span> (line.<span class="title function_">startsWith</span>(<span class="string">&quot;data: &quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = line.<span class="title function_">slice</span>(<span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data === <span class="string">&quot;[DONE]&quot;</span>) &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> parsed = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data);</span><br><span class="line">          <span class="keyword">const</span> content = parsed.<span class="property">choices</span>[<span class="number">0</span>]?.<span class="property">delta</span>?.<span class="property">content</span> || <span class="string">&quot;&quot;</span>;</span><br><span class="line">          process.<span class="property">stdout</span>.<span class="title function_">write</span>(content);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          <span class="comment">// 忽略解析错误</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="title function_">streamChatFetch</span>(<span class="string">&quot;什么是 Promise？&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="前端实现（浏览器）"><a href="#前端实现（浏览器）" class="headerlink" title="前端实现（浏览器）"></a>前端实现（浏览器）</h4><p>  <strong>使用 EventSource API</strong>：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意：OpenAI API 不支持直接使用 EventSource（需要 POST 请求）</span></span><br><span class="line"><span class="comment">// 这里展示的是通用的 SSE 客户端实现</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">streamChatBrowser</span>(<span class="params">userMessage</span>) &#123;</span><br><span class="line">  <span class="comment">// 需要后端代理，因为 EventSource 只支持 GET 请求</span></span><br><span class="line">  <span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(</span><br><span class="line">    <span class="string">`/api/chat/stream?message=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(userMessage)&#125;</span>`</span>,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> outputDiv = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;output&quot;</span>);</span><br><span class="line"></span><br><span class="line">  eventSource.<span class="property">onmessage</span> = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (event.<span class="property">data</span> === <span class="string">&quot;[DONE]&quot;</span>) &#123;</span><br><span class="line">      eventSource.<span class="title function_">close</span>();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> data = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(event.<span class="property">data</span>);</span><br><span class="line">      <span class="keyword">const</span> content = data.<span class="property">choices</span>[<span class="number">0</span>]?.<span class="property">delta</span>?.<span class="property">content</span> || <span class="string">&quot;&quot;</span>;</span><br><span class="line">      outputDiv.<span class="property">textContent</span> += content;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;解析错误:&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  eventSource.<span class="property">onerror</span> = <span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;SSE 错误:&quot;</span>, error);</span><br><span class="line">    eventSource.<span class="title function_">close</span>();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <strong>使用 Fetch API（推荐）</strong>：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">streamChatBrowser</span>(<span class="params">userMessage</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&quot;/api/chat&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">      <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">      <span class="attr">message</span>: userMessage,</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> reader = response.<span class="property">body</span>.<span class="title function_">getReader</span>();</span><br><span class="line">  <span class="keyword">const</span> decoder = <span class="keyword">new</span> <span class="title class_">TextDecoder</span>();</span><br><span class="line">  <span class="keyword">const</span> outputDiv = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;output&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; done, value &#125; = <span class="keyword">await</span> reader.<span class="title function_">read</span>();</span><br><span class="line">    <span class="keyword">if</span> (done) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> chunk = decoder.<span class="title function_">decode</span>(value);</span><br><span class="line">    <span class="keyword">const</span> lines = chunk.<span class="title function_">split</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> line <span class="keyword">of</span> lines) &#123;</span><br><span class="line">      <span class="keyword">if</span> (line.<span class="title function_">startsWith</span>(<span class="string">&quot;data: &quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = line.<span class="title function_">slice</span>(<span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data === <span class="string">&quot;[DONE]&quot;</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> parsed = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data);</span><br><span class="line">          <span class="keyword">const</span> content = parsed.<span class="property">choices</span>[<span class="number">0</span>]?.<span class="property">delta</span>?.<span class="property">content</span> || <span class="string">&quot;&quot;</span>;</span><br><span class="line">          outputDiv.<span class="property">textContent</span> += content;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          <span class="comment">// 忽略解析错误</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="流式输出的最佳实践"><a href="#流式输出的最佳实践" class="headerlink" title="流式输出的最佳实践"></a>流式输出的最佳实践</h3><ol>
+<li><strong>错误处理</strong>：流式输出中途可能中断，需要妥善处理错误</li>
+<li><strong>缓冲处理</strong>：可能一次收到多个 chunk，需要正确解析</li>
+<li><strong>用户体验</strong>：添加打字动画效果，提升视觉体验</li>
+<li><strong>取消机制</strong>：允许用户中途取消生成</li>
+<li><strong>内容累积</strong>：保存完整内容，方便后续使用</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://shadowbanuser.github.io">NecroSZN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://shadowbanuser.github.io/2026/03/28/AI-Standard-1/">https://shadowbanuser.github.io/2026/03/28/AI-Standard-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a><a class="post-meta__tags" href="/tags/llm%E8%B0%83%E7%94%A8/">llm调用</a></div><div class="post-share"><div class="social-share" data-image="/images/iroha.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/03/29/AI-Standard-2/" title="转载&amp;存档丨AI 标准协议及调用（2）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">转载&存档丨AI 标准协议及调用（2）</div></div><div class="info-2"><div class="info-item-1">Tool Call（函数调用）详解什么是 Tool Call？  Tool Call（也称 Function Calling）是 AI 模型的一项核心能力，它允许模型在对话过程中主动调用外部函数或 API。 核心概念  想象一下这个场景：  用户问：“北京今天天气怎么样？” AI 模型本身不知道实时天气信息（它只是一个语言模型） 但如果我们给 AI 提供一个”查询天气”的工具，它就能： 识别用户需要天气信息 决定调用 get_weather 函数 提取参数：city=&quot;北京&quot; 返回函数调用请求给开发者 开发者执行实际的天气查询 将结果返回给 AI AI 基于结果生成自然语言回复    关键点：AI 模型本身不会执行函数，它只是”决定”需要调用哪个函数，并生成调用参数。实际的函数执行由开发者完成。 Tool Call 的工作流程12345678910111213用户提问   ↓AI 分析问题   ↓AI 决定需要调用工具 ← 这里 AI 只是&quot;决策&quot;   ↓返回工具调用请求（函数名 + 参数）   ↓开发者执行实际函数 ← 这里才是真正的执行...</div></div></div></a><a class="pagination-related" href="/2026/03/15/%E8%B0%B7%E6%AD%8CGemini%E7%B2%97%E4%BD%93bug%E4%BF%AE%E5%A4%8D%E6%8F%92%E4%BB%B6/" title="谷歌Gemini粗体bug修复插件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">谷歌Gemini粗体bug修复插件</div></div><div class="info-2"><div class="info-item-1">新手的第一个 GitHub 仓库，把谷歌gemini网页版字体加粗遇到特殊标点符号时失效的bug覆盖了，还是有必要记录一下的。 最初只是强迫症的一点偏执，结果跟大厂的 Virtual DOM 防篡改机制和 CSP 拦截斗智斗勇了8h，最后靠gemini自己帮我用纯 DOM 节点重写绕过了安全墙。 虽然是vibe coding出来的，但亲手把第五版代码 commit 上去最终成功时的成就感还是溢于言表的。 也希望大家可以给我的GitHub项目一个star，感谢各位支持！ 项目地址：Gemini Markdown Bold Fixer </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/29/AI-Standard-2/" title="转载&amp;存档丨AI 标准协议及调用（2）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-29</div><div class="info-item-2">转载&amp;存档丨AI 标准协议及调用（2）</div></div><div class="info-2"><div class="info-item-1">Tool Call（函数调用）详解什么是 Tool Call？  Tool Call（也称 Function Calling）是 AI 模型的一项核心能力，它允许模型在对话过程中主动调用外部函数或 API。 核心概念  想象一下这个场景：  用户问：“北京今天天气怎么样？” AI 模型本身不知道实时天气信息（它只是一个语言模型） 但如果我们给 AI 提供一个”查询天气”的工具，它就能： 识别用户需要天气信息 决定调用 get_weather 函数 提取参数：city=&quot;北京&quot; 返回函数调用请求给开发者 开发者执行实际的天气查询 将结果返回给 AI AI 基于结果生成自然语言回复    关键点：AI 模型本身不会执行函数，它只是”决定”需要调用哪个函数，并生成调用参数。实际的函数执行由开发者完成。 Tool Call 的工作流程12345678910111213用户提问   ↓AI 分析问题   ↓AI 决定需要调用工具 ← 这里 AI 只是&quot;决策&quot;   ↓返回工具调用请求（函数名 + 参数）   ↓开发者执行实际函数 ← 这里才是真正的执行...</div></div></div></a><a class="pagination-related" href="/2026/03/30/AI-Standard-3/" title="转载&amp;存档丨AI 标准协议及调用（3）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-30</div><div class="info-item-2">转载&amp;存档丨AI 标准协议及调用（3）</div></div><div class="info-2"><div class="info-item-1">实战示例：使用 OpenAI 协议调用 DeepSeek示例 1：使用 Go安装依赖12go get [github.com/sashabaranov/go-openai](https://github.com/sashabaranov/go-openai)go get [github.com/joho/godotenv](https://github.com/joho/godotenv)  代码实现12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364package mainimport (    &quot;context&quot;    &quot;fmt&quot;    &quot;log&quot;    &quot;os&quot;    &quot;[github.com/joho/godotenv](https://github.com/joho/godotenv)&quot; ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/iroha.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">NecroSZN</div><div class="author-info-description">厚积薄发</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShadowbanUser"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">本站用于记录学习历程、技术总结和个人思考。内容持续更新。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/30/AI-Standard-3/" title="转载&amp;存档丨AI 标准协议及调用（3）">转载&amp;存档丨AI 标准协议及调用（3）</a><time datetime="2026-03-30T12:03:43.000Z" title="Created 2026-03-30 20:03:43">2026-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/29/AI-Standard-2/" title="转载&amp;存档丨AI 标准协议及调用（2）">转载&amp;存档丨AI 标准协议及调用（2）</a><time datetime="2026-03-29T10:17:44.000Z" title="Created 2026-03-29 18:17:44">2026-03-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/28/AI-Standard-1/" title="转载&amp;存档丨AI 标准协议及调用（1）">转载&amp;存档丨AI 标准协议及调用（1）</a><time datetime="2026-03-28T08:41:55.000Z" title="Created 2026-03-28 16:41:55">2026-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/15/%E8%B0%B7%E6%AD%8CGemini%E7%B2%97%E4%BD%93bug%E4%BF%AE%E5%A4%8D%E6%8F%92%E4%BB%B6/" title="谷歌Gemini粗体bug修复插件">谷歌Gemini粗体bug修复插件</a><time datetime="2026-03-15T09:13:05.000Z" title="Created 2026-03-15 17:13:05">2026-03-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/25/Kaguya/" title="全网角度最奇怪的辉夜姬杂谈…">全网角度最奇怪的辉夜姬杂谈…</a><time datetime="2026-02-25T06:00:00.000Z" title="Created 2026-02-25 14:00:00">2026-02-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By NecroSZN</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
