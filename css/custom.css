@@ -1,14 +1,14 @@
-/* 强制覆盖页脚的蓝色背景 */
+/* 覆盖页脚的蓝色背景 */
 #footer {
     background: #101010 !important; 
 }
 
-/* 确保页脚里面的文字（比如版权信息）变成浅灰色，防止黑底黑字看不清 */
+/* 确保页脚里面的文字变成浅灰色，防黑底黑字看不清 */
 #footer * {
     color: #a9a9b3 !important;
 }
 
-/* 覆盖页脚那个半透明的渐变遮罩（如果有的话） */
+/* 覆盖页脚半透明的渐变遮罩 */
 #footer::before {
     background: transparent !important;
 }
@@ -18,7 +18,7 @@
 .recent-post-item, 
 #content-inner #post {
     background: rgba(255, 255, 255, 0.1) !important; 
-    backdrop-filter: blur(10px); /* 磨砂玻璃的核心：背景模糊 */
+    backdrop-filter: blur(10px); /* 背景模糊 */
     -webkit-backdrop-filter: blur(10px); /* 兼容苹果浏览器 */
 }
 
