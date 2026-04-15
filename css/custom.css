@@ -47,19 +47,19 @@ a.post-meta__tags:hover,
 
 /* 1. 鼠标选中文字的背景色（核心） */
 ::selection {
-  background: #0066FF;
+  background: #4aa2f5;
   color: #ffffff;
 }
 ::-moz-selection {
-  background: #0066FF;
+  background: #4aa2f5;
   color: #ffffff;
 }
 
-/* 2. 左侧文章目录（TOC）全量改 #0066FF */
+/* 2. 左侧文章目录（TOC）全量改 #4aa2f5 */
 .toc-item.active > .toc-link {
-  color: #0066FF !important;
-  border-left-color: #0066FF !important;
+  color: #4aa2f5 !important;
+  border-left-color: #4aa2f5 !important;
   background: rgba(89, 176, 244, 0.1) !important;
 }
-.toc-link:hover { color: #0066FF !important; }
-.toc-link::before { background: #0066FF !important; }
+.toc-link:hover { color: #4aa2f5 !important; }
+.toc-link::before { background: #4aa2f5 !important; }
