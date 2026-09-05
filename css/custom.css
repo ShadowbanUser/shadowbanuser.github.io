@@ -1,0 +1,65 @@
+/* 覆盖页脚的蓝色背景 */
+#footer {
+    background: #101010 !important; 
+}
+
+/* 确保页脚里面的文字变成浅灰色，防黑底黑字看不清 */
+#footer * {
+    color: #a9a9b3 !important;
+}
+
+/* 覆盖页脚半透明的渐变遮罩 */
+#footer::before {
+    background: transparent !important;
+}
+
+/* 让侧边栏卡片、文章卡片带一点玻璃拟态（模糊）效果 */
+#aside-content .card-widget, 
+.recent-post-item, 
+#content-inner #post {
+    background: rgba(255, 255, 255, 0.1) !important; 
+    backdrop-filter: blur(10px); /* 背景模糊 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容苹果浏览器 */
+}
+
+/* 轰杀所有页面（含独立标签页、文章页顶部/底部）的标签背景色 */
+a.post-meta__tags, 
+.tag-cloud-list a, 
+.article-meta__tags {
+    background: transparent !important;
+    background-color: transparent !important; /* 锁死背景色 */
+    border: 1px solid #00d4ff !important; /* 强制边框 */
+    color: #00d4ff !important; /* 强制字体颜色 */
+    box-shadow: 0 0 5px rgba(0, 212, 255, 0.2) !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+}
+
+/* 悬停时的光效反转 */
+a.post-meta__tags:hover, 
+.tag-cloud-list a:hover, 
+.article-meta__tags:hover {
+    background: #00d4ff !important;
+    background-color: #00d4ff !important;
+    color: #000000 !important;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6) !important;
+}
+
+/* 1. 鼠标选中文字的背景色（核心） */
+::selection {
+  background: #4aa2f5;
+  color: #ffffff;
+}
+::-moz-selection {
+  background: #4aa2f5;
+  color: #ffffff;
+}
+
+/* 2. 左侧文章目录（TOC）全量改 #4aa2f5 */
+.toc-item.active > .toc-link {
+  color: #4aa2f5 !important;
+  border-left-color: #4aa2f5 !important;
+  background: rgba(89, 176, 244, 0.1) !important;
+}
+.toc-link:hover { color: #4aa2f5 !important; }
+.toc-link::before { background: #4aa2f5 !important; }
